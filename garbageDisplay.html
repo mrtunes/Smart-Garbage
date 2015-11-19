@@ -1,0 +1,75 @@
+<html>
+<head>
+	<link rel="stylesheet" href="stylesheet.css">
+	<script type="text/javascript" src="http://cdn.jsdelivr.net/sparkjs/0.5.9/spark.min.js"></script>
+	<script type="text/javascript">
+
+	// This the dynamic content of the web page
+	// It is comprised of javascript code
+
+	// After a successful login, this checks for your devices and makes them available to this webpage
+	spark.on('login', function() {
+		spark.listDevices(function(err, devices) {
+			console.log(devices[0].name);
+		});
+	});
+
+	// This is the function that calls readSensor on the hardware: Particle.function("check", readSensor);
+	// In order to complete the call we have to pass the string name ("check") and a parameter for which pin to read (pin) through the ParticleJS function called device.callFunction
+	function photon_function() {
+		// This grabs the drop down document element by its id
+		allPins = document.getElementById("analogInput");
+
+		// This grabs the value of the selected option in the drop down menu
+		//pin = allPins.options[allPins.selectedIndex].value;
+
+		pin = allPins.A0.value;
+
+		// This is the ParticleJS function for calling a function on the Photon
+		// It gets confirmation data in the form of an int if the call was successful
+		spark.devices[0].callFunction('check', pin, function(err, data) {
+			if (err) {
+				console.log('An error occurred:', err);
+			} else {
+				console.log('Function called successfully:', data);
+		    // If the call is successful it means we've sent the value for which pin we'd like to read
+		    // We must now call for the variable
+		    photon_variable();
+		}
+	});
+	}
+
+	// This function asks the Photon for a specific variable called 'analog'
+	// In this application we are dynamically selecting the pin we'd like to read so this single variable does all the reading and sharing
+	function photon_variable() {
+		spark.devices[0].getVariable('analog', function(err, data) {
+			if (err) {
+				console.log('An error occurred while getting attrs:', err);
+			} else {
+				console.log('Device attr retrieved successfully:', data);
+				// this takes returned data and pulls the name and result values from the JSON formated 'key: "value"' pairs you can see in the console log of your browser
+				// it then gets the the document elements that need to be dynamically updated with the new data and updates them
+				
+				document.getElementById("reading").innerHTML = "READING: " + data.result;
+			}
+		});
+	}
+
+	// Input your Particle.io credentials here
+	spark.login({ username: 'mrtunes@gmail.com', password: 'photon'});
+
+	</script>
+</head>
+
+<body>
+	<div class="wrapper">
+		<br>
+		<fieldset>
+			
+			<h2 id="reading">Garbage Status: ------</h2>
+			
+			<input type="submit" onClick="photon_function()" value="check"/>
+		</fieldset>
+	</div>
+</body>
+</html>
