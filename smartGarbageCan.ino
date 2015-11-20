@@ -59,15 +59,18 @@ int readSensor(String analogPin){
 return 1;
 
 
-    } /*else if (analogSensor > 300 && analogSensor < 1000) {
+    } else if (analogSensor > 300 && analogSensor < 1000) {
          
          return 2;
 
-    } else (analogSensor > 1000 && analogSensor < 2000) {
+    } else if (analogSensor > 1000 && analogSensor < 2000) {
          
          return 3;
 
-    } */
+    }  else{
+
+        return -1;
+    }
 
 
 }
