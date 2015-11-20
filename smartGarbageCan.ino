@@ -56,6 +56,7 @@ int readSensor(String analogPin){
   analogSensor = analogRead(sensorPin);   
     delay(50);
     if(analogSensor > 0 && analogSensor < 300){
+    
 return 1;
 
 
