@@ -4,25 +4,39 @@ int ledGood = D0; // green
 int ledMedium = D1; // yellow 
 int ledBad = D2; //red 
 
+int Trig_pin = 3;
+ int   Echo_pin = 5;
+  long  Time_out = 3000;
+
 int sensorPin = A0;
 int analogSensor = 0;
 
+//const char good;
+
 void setup() {
+    Serial.begin(9600);
     pinMode(ledGood, OUTPUT);
     pinMode(ledMedium, OUTPUT);
     pinMode(ledBad, OUTPUT);
 
     pinMode(sensorPin, INPUT);
+    
+      pinMode(Trig_pin,OUTPUT);
+   pinMode(Echo_pin,INPUT);
 
     // expose the function blinkLED and give it the string name "blink"
     // Particle.function("call_name", called_function);
   //  Particle.function("blink", blinkLED);
     Particle.variable("analog", analogSensor);
     Particle.function("check", readSensor);
+    Serial.println("setup complete");
+    
 }
 
 void loop() {  
-    
+    //USonicRange();
+    Serial.print("presser "); 
+  Serial.println(analogSensor); 
          analogSensor = analogRead(sensorPin);   
     delay(50);
     if(analogSensor > 0 && analogSensor < 300){
@@ -58,6 +72,7 @@ int readSensor(String analogPin){
     if(analogSensor > 0 && analogSensor < 300){
     
 return 1;
+//Spark.publish(String "good");
 
 
     } else if (analogSensor > 300 && analogSensor < 1000) {
@@ -75,6 +90,29 @@ return 1;
 
 
 }
+
+
+
+long USonicRange()
+{ 
+    //Serial.print("begin ");
+      digitalWrite(Trig_pin, LOW);
+  delayMicroseconds(2);
+  digitalWrite(Trig_pin, HIGH);
+  delayMicroseconds(10);
+  digitalWrite(Trig_pin, LOW);
+  long duration = pulseIn(Echo_pin,HIGH);
+  if ( duration == 0 ) {
+  duration = Time_out; }
+  duration = duration / 29 / 2;
+  //Serial.print("usonic "); 
+  //Serial.println(duration); 
+  return duration;
+}
+
+
+  
+
     
     
     /*if (analogSensor <= 100){
