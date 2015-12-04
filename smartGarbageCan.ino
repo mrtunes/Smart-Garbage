@@ -6,7 +6,7 @@ int ledBad = D2; //red
 
 int Trig_pin = 3;
  int   Echo_pin = 5;
-  long  Time_out = 3000;
+  long  Time_out = 1000;
 
 int sensorPin = A0;
 int analogSensor = 0;
@@ -105,8 +105,8 @@ long USonicRange()
   if ( duration == 0 ) {
   duration = Time_out; }
   duration = duration / 29 / 2;
-  //Serial.print("usonic "); 
-  //Serial.println(duration); 
+  Serial.print("usonic "); 
+  Serial.println(duration); 
   return duration;
 }
 

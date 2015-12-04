@@ -11,6 +11,7 @@
 	spark.on('login', function() {
 		spark.listDevices(function(err, devices) {
 			console.log(devices[0].name);	
+			console.log(devices[1].name);
 		});
 	});
 
@@ -53,6 +54,42 @@
 		});
 	}
 
+	function photon_variableLeon() {
+		spark.devices[1].getVariable('analog', function(err, data) {
+			if (err) {
+				console.log('An error occurred while getting attrs:', err);
+			} else {
+				console.log('Device attr retrieved successfully:', data);
+				// this takes returned data and pulls the name and result values from the JSON formated 'key: "value"' pairs you can see in the console log of your browser
+				
+				var numDisplay;
+				var theColor2;
+					
+				if (data.result > 0 && data.result < 300){
+					numDisplay = "good";
+					theColor2 = "#16F534";
+
+				} else if (data.result > 300 && data.result < 1000){
+
+				numDisplay = "average";
+				theColor2 = "#FCE80D";
+
+				} else if (data.result > 1000 && data.result < 3000){
+
+				numDisplay = "very bad man";
+				theColor2 = "#E62102";
+
+				}
+
+				
+				
+				//document.getElementById("reading").innerHTML = "READING: " + data.result;
+				document.getElementById("number").innerHTML = "Garbage Can #2: " + numDisplay;
+				document.getElementById("gBox2").style.backgroundColor = theColor2;
+			}
+		});
+	}
+
 	// Input your Particle.io credentials here
 	spark.login({ username: 'mrtunes@gmail.com', password: 'photon'});
 
@@ -69,6 +106,16 @@
 			<div id="gBox" style="width:50px; height:50px; background-color:#fff;">
 			</div> <br />
 			<input type="button" onClick="photon_variable()" value="check"/>
+		</fieldset>
+		<br />
+
+			<fieldset>
+			
+			<!-- <h2 id="reading">READING: </h2> -->
+			<h2 id="number">Garbage Can #2: --- </h2>
+			<div id="gBox2" style="width:50px; height:50px; background-color:#fff;">
+			</div> <br />
+			<input type="button" onClick="photon_variableLeon()" value="check"/>
 		</fieldset>
 	</div>
 </body>
